@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { PhotoProvider,PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
 
 const Card = ({service,children}) => {
     return (
@@ -10,14 +11,18 @@ const Card = ({service,children}) => {
           </p>
         </div>
         <div className="prod-img">
-          <img
-            alt="/"
-            src={service.image}
-            className=" h-[200px] object-cover object-center w-full"
-          />
+          <PhotoProvider>
+            <PhotoView src={service.image}>
+              <img
+                alt="/"
+                src={service.image}
+                className=" h-[200px] object-cover object-center w-full"
+              />
+            </PhotoView>
+          </PhotoProvider>
         </div>
         <div className="prod-info grid gap-10 mt-5">
-          <p className="text-sm text-gray-400">{service.desc.slice(0 - 150)}</p>
+          <p className="text-sm text-gray-400">{service.desc.slice(0 - 100)+'...'}</p>
           <div className="flex flex-col md:flex-row justify-between items-center text-gray-900">
             <p className="font-bold text-xl">{service.price} $</p>
             {children}

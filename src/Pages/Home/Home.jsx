@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 import React from "react";
 import { Link,useLoaderData } from "react-router-dom";
+import Card from "../../Components/Card/Card";
 import Slider from "../../Components/Slider/Slider";
 
 const Home = () => {
@@ -33,35 +34,14 @@ const Home = () => {
           <div className="flex items-center justify-center xl:w-11/12 mx-auto">
             <div className="grid  sm:grid-cols-3 gap-4 justify-center items-center">
               {services.map((service) => (
-                <div className="card justify-center p-10 bg-white rounded-lg shadow-2xl md:min-h-[400px]">
-                  <div className="prod-title">
-                    <p className="text-xl mb-2 uppercase text-gray-900 font-bold">
-                      {service.name}
-                    </p>
-                  </div>
-                  <div className="prod-img">
-                    <img
-                      alt="/"
-                      src={service.image}
-                      className="w-full object-cover object-center max-h-[200px]"
-                    />
-                  </div>
-
-                  <div className="prod-info grid gap-5 mt-5">
-                    <p className="text-sm text-gray-400">
-                      {service.desc.slice(0 - 150)}
-                    </p>
-                    <div className="flex flex-col md:flex-row justify-between items-center text-gray-900">
-                      <p className="font-bold text-xl">{service.price} $</p>
-                      <Link
-                        to={`/services/${service._id}`}
-                        className="px-4 py-1 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none text-sm"
-                      >
-                       View Details
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                <Card service={service} key={service._id}>
+                  <Link
+                    to={`/services/${service._id}`}
+                    className="px-4 py-1 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none text-sm"
+                  >
+                    View Details
+                  </Link>
+                </Card>
               ))}
             </div>
           </div>
