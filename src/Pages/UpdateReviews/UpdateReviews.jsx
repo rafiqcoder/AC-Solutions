@@ -3,9 +3,9 @@
 
 const UpdateReviews = () => {
 
-  };
+
   return (
-  
+  <div></div>
   );
 };
 

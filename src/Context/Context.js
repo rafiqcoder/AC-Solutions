@@ -7,13 +7,19 @@ export const UserContext = createContext();
 
 const Context = ({ children }) => {
     const [refresh,setRefresh] = useState(false);
-
+    const [services,setServices] = useState([]);
     const [user,setUser] = useState([]);
     const [ loader, setLoader ] = useState(true);
 
     const auth = getAuth(app);
     const GoogleProvider = new GoogleAuthProvider();
 
+    useEffect(() => {
+        fetch('http://localhost:5000/services')
+            .then(res => res.json())
+            .then(data => setServices(data))
+            .catch(error => console.log(error))
+    },[refresh]);
 
     /// logout
     const LogOut = () => {
@@ -29,7 +35,7 @@ const Context = ({ children }) => {
             if (user) {
                 setUser(user);
             } else {
-                setUser([]);
+                setUser({});
             }
             setLoader(false);
         })
@@ -39,7 +45,7 @@ const Context = ({ children }) => {
     console.log(user);
 
 
-    const dataInfo = { refresh,setRefresh }
+    const dataInfo = { services,refresh,setRefresh }
     const userInfo = { googleLogin,user,LogOut }
     return (
         <UserContext.Provider value ={userInfo}>
