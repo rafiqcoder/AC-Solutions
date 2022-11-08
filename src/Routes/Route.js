@@ -13,6 +13,9 @@ import PrivateRoute from "./PrivateRoute";
 
 
 const Route = () => {
+    
+
+
     const router = createBrowserRouter([
         {
             path: '/',element: <Main></Main>,
@@ -47,7 +50,10 @@ const Route = () => {
                         </PrivateRoute>
                 },
                 {
-                    path: '/reviews',element: <Reviews></Reviews>
+                    path: '/reviews',element:
+                        <PrivateRoute>
+                            <Reviews></Reviews>
+                        </PrivateRoute>
                 },
                 {
                     path: '*',element: <NotFound />

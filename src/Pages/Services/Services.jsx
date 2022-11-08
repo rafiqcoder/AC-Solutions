@@ -71,7 +71,7 @@ const Services = () => {
                   to={`/services/${service._id}`}
                   className="px-4 py-1 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none text-sm"
                 >
-                  Details
+                 View Details
                 </Link>
               </Card>
             ))}

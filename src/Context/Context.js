@@ -8,6 +8,7 @@ export const UserContext = createContext();
 const Context = ({ children }) => {
     const [refresh,setRefresh] = useState(false);
     const [services,setServices] = useState([]);
+    const [reviews,setReviews] = useState([]);
     const [user,setUser] = useState([]);
     const [loader,setLoader] = useState(true);
 
@@ -21,6 +22,13 @@ const Context = ({ children }) => {
             .catch(error => console.log(error))
     },[refresh]);
 
+    useEffect(() => {
+        fetch(`http://localhost:5000/reviews?email=${user?.email}`)
+            .then(res => res.json())
+            .then(data => setReviews(data))
+            .catch(error => console.log(error))
+    },[refresh,user]);
+  
     /// logout
     const LogOut = () => {
         setLoader(true);
@@ -45,7 +53,7 @@ const Context = ({ children }) => {
     // console.log(user
 
 
-    const dataInfo = { services,refresh,setRefresh, }
+    const dataInfo = { services,refresh,setRefresh,reviews }
     const userInfo = { googleLogin,user,LogOut,loader,setLoader }
     return (
         <UserContext.Provider value={userInfo}>

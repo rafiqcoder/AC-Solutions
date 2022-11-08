@@ -1,5 +1,5 @@
 import moment from "moment";
-import React,{ useContext } from 'react';
+import React,{ useContext,useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link,useLoaderData,useLocation } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ import { DataContext,UserContext } from '../../Context/Context';
 
 const ServiceDetails = () => {
     const {services,reviews} = useLoaderData();
-    
+    const [newReviews, setNewReviews] = useState(reviews);
  
     const [service] = services;
    
@@ -49,11 +49,18 @@ const ServiceDetails = () => {
             .then((res) => res.json())
             .then((data) => {
                 if (data.data.acknowledged) {
-                    toast.success("Review Added Successfully");
+                  toast.success("Review Added Successfully");
                     setRefresh(!refresh);
                     form.reset();
                 }
             })
+      
+      fetch(`http://localhost:5000/services/${service._id}`)
+        .then((res) => res.json())
+        .then((data) => {
+           setNewReviews(data.reviews);
+          console.log(data.reviews);
+        });
     }
   
 
@@ -123,7 +130,7 @@ const ServiceDetails = () => {
               </Link>
             </p>
           )}
-          {reviews.map((review) => (
+          {newReviews.map((review) => (
             <div
               key={review._id}
               className="sm:flex mt-10 shadow-lg border rounded"
