@@ -2,10 +2,10 @@
 
 
 const UpdateReviews = () => {
-
+ 
 
   return (
-  <div></div>
+    <div></div>
   );
 };
 

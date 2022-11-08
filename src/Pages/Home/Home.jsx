@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 import React,{ useContext } from "react";
+import { Link } from "react-router-dom";
 import Slider from "../../Components/Slider/Slider";
 import { DataContext } from "../../Context/Context";
 
@@ -9,7 +10,6 @@ const Home = () => {
 
     console.log(services);
   return (
-    
     <div>
       <Slider></Slider>
       <div className="bg-gray-50 py-20 flex flex-col items-center justify-center">
@@ -20,7 +20,7 @@ const Home = () => {
           >
             Featured Services
           </h1>
-          
+
           <h2
             role="contentinfo"
             tabIndex={0}
@@ -38,21 +38,21 @@ const Home = () => {
                     <p className="text-xl mb-2 uppercase text-gray-900 font-bold">
                       {service.name}
                     </p>
-                    <p className="uppercase text-sm text-gray-400">
-                      The best shoes in the marketplace
-                    </p>
                   </div>
                   <div className="prod-img">
                     <img
                       alt="/"
                       src={service.image}
-                      className="w-full object-cover object-center"
+                      className="w-full object-cover object-center max-h-[200px]"
                     />
                   </div>
-                  
-                  <div className="prod-info grid gap-10 mt-5">
+
+                  <div className="prod-info grid gap-5 mt-5">
+                    <p className="text-sm text-gray-400">
+                      {service.desc.slice(0 - 150)}
+                    </p>
                     <div className="flex flex-col md:flex-row justify-between items-center text-gray-900">
-                      <p className="font-bold text-xl">{service.price}</p>
+                      <p className="font-bold text-xl">{service.price} $</p>
                       <button className="px-4 py-1 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none text-sm">
                         Add to cart
                       </button>
@@ -61,9 +61,11 @@ const Home = () => {
                 </div>
               ))}
             </div>
-            
           </div>
-          <div className="text-center"><button className="btn mt-5">view more</button></div>
+          <div className="text-center">
+            <Link to="/services" className="btn mt-5">view All
+            </Link>
+          </div>
         </div>
       </div>
     </div>
