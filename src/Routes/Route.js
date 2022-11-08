@@ -9,6 +9,7 @@ import NotFound from "../Pages/NotFound/NotFound";
 import Reviews from "../Pages/Reviews/Reviews";
 import ServiceDetails from "../Pages/ServiceDetails/ServiceDetails";
 import Services from "../Pages/Services/Services";
+import PrivateRoute from "./PrivateRoute";
 
 
 const Route = () => {
@@ -40,7 +41,10 @@ const Route = () => {
                     path: '/register',element: <Register></Register>
                 },
                 {
-                    path: '/add-service',element: <AddServices />
+                    path: '/add-service',element:
+                        <PrivateRoute>
+                            <AddServices />
+                        </PrivateRoute>
                 },
                 {
                     path: '/reviews',element: <Reviews></Reviews>

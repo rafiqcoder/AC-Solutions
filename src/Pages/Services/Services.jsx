@@ -51,7 +51,7 @@ const Services = () => {
                     onChange={handleSearch}
                     type="text"
                     name="search"
-                    autocomplete="off"
+                    autoComplete="off"
                     placeholder="Write to Search Services"
                     className="input input-bordered rounded-full bg-white w-full text-black"
                   />

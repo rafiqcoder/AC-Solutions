@@ -23,6 +23,7 @@ const Context = ({ children }) => {
 
     /// logout
     const LogOut = () => {
+        setLoader(true);
         return auth.signOut()
     }
 
@@ -34,19 +35,18 @@ const Context = ({ children }) => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 setUser(user);
-            } else {
-                setUser({});
-            }
-            setLoader(false);
+                setLoader(false);
+            } 
+            
         })
         return () => unsubscribe();
     },[auth])
 
-    console.log(user);
+    // console.log(user
 
 
-    const dataInfo = { services,refresh,setRefresh }
-    const userInfo = { googleLogin,user,LogOut }
+    const dataInfo = { services,refresh,setRefresh, }
+    const userInfo = { googleLogin,user,LogOut,loader,setLoader }
     return (
         <UserContext.Provider value={userInfo}>
 
