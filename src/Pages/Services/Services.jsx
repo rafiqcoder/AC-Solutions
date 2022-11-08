@@ -10,12 +10,12 @@ const Services = () => {
   useEffect(() => {
     setDatas(services)
   },[services])
-    
+
     const handleSearch = (e) => {
       
         const searchText = e.target.value;
         const filtered = services.filter(service => service.name.toLowerCase().includes(searchText.toLowerCase()));
-    
+
        
             if (filtered.length > 0) {
                 setDatas(filtered);
@@ -53,7 +53,7 @@ const Services = () => {
                     name="search"
                     autocomplete="off"
                     placeholder="Write to Search Services"
-                    className="input input-bordered rounded-full bg-white w-full"
+                    className="input input-bordered rounded-full bg-white w-full text-black"
                   />
                   <button className=" bg-gray-100 absolute right-0 top-0  items-center text-center self-center flex justify-center btn-circle">
                     <BsSearch className="text-gray-400 font-bold text-xl "></BsSearch>

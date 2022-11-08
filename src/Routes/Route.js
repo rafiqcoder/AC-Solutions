@@ -5,6 +5,7 @@ import Main from "../Layout/Main";
 import AddServices from "../Pages/AddServices/AddServices";
 import Blog from "../Pages/Blog/Blog";
 import Home from "../Pages/Home/Home";
+import NotFound from "../Pages/NotFound/NotFound";
 import Reviews from "../Pages/Reviews/Reviews";
 import ServiceDetails from "../Pages/ServiceDetails/ServiceDetails";
 import Services from "../Pages/Services/Services";
@@ -16,7 +17,9 @@ const Route = () => {
             path: '/',element: <Main></Main>,
             children: [
                 {
-                    path: '/',element: <Home></Home>
+                    path: '/',element: <Home></Home>,
+                    loader: () => fetch('http://localhost:5000/home')
+
                 },
                 {
                     path: '/blog',element: <Blog></Blog>
@@ -41,6 +44,9 @@ const Route = () => {
                 },
                 {
                     path: '/reviews',element: <Reviews></Reviews>
+                },
+                {
+                    path: '*',element: <NotFound />
                 },
                 // {
                 //     path: '/reviews/:id',

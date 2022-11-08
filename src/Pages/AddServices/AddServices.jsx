@@ -1,16 +1,24 @@
-import React from 'react';
+import React,{ useContext,useEffect,useState } from 'react';
 import toast from 'react-hot-toast';
+import { DataContext } from '../../Context/Context';
 
 const AddServices = () => {
+  const [order,setOrder] = useState(1);
+  const { services, refresh, setRefresh } = useContext(DataContext);
+  useEffect(() => {
+    setOrder(services.length + 1);
+  },[services])
+  console.log(order);
   const handleAddService = (e) => {
     e.preventDefault();
 
     const form = e.target;
+    const id = order;
     const name = form.name.value;
     const price = form.price.value;
     const desc = form.desc.value;
     const image = form.img.value;
-    const service = { name, price, desc, image };
+    const service = { name, price, desc, image, id };
 
     fetch("http://localhost:5000/add-service", {
       method: "POST",
@@ -21,14 +29,14 @@ const AddServices = () => {
       .then((data) => {
         if (data.data.acknowledged) {
           toast.success("Service Added Successfully");
-          console.log(data);
+          setRefresh(!refresh);
           form.reset();
         }
       })
       .catch((err) => console.log(err));
   };
   return (
-    <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mx-auto">
+    <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mx-auto my-10">
       <form onSubmit={handleAddService} className="card-body">
         <div className="form-control">
           <label className="label">
