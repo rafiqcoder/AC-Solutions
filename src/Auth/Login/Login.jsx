@@ -2,11 +2,12 @@ import React,{ useContext } from 'react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../Context/Context';
+import UseTitle from '../../hooks/UseTitle';
 
 const Login = () => {
   const { googleLogin, loginWithPassword } =
     useContext(UserContext);
-  
+    UseTitle('Login');
   
   
   

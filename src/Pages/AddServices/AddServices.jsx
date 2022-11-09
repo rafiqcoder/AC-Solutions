@@ -1,10 +1,14 @@
 import React,{ useContext,useEffect,useState } from 'react';
 import toast from 'react-hot-toast';
 import { DataContext } from '../../Context/Context';
+import UseTitle from '../../hooks/UseTitle';
 
 const AddServices = () => {
   const [order,setOrder] = useState(1);
-  const { services, refresh, setRefresh } = useContext(DataContext);
+  const { services,refresh,setRefresh } = useContext(DataContext);
+
+  UseTitle('Add Services');
+
   useEffect(() => {
     setOrder(services.length + 1);
   },[services])

@@ -3,10 +3,14 @@ import { BsSearch } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import Card from '../../Components/Card/Card';
 import { DataContext } from '../../Context/Context';
+import UseTitle from '../../hooks/UseTitle';
 
 const Services = () => {
     const { services } = useContext(DataContext)
   const [datas,setDatas] = useState([]);
+
+  UseTitle('Services');
+  
   useEffect(() => {
     setDatas(services)
   },[services])

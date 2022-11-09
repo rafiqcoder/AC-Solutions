@@ -3,10 +3,12 @@ import React from "react";
 import { Link,useLoaderData } from "react-router-dom";
 import Card from "../../Components/Card/Card";
 import Slider from "../../Components/Slider/Slider";
+import UseTitle from "../../hooks/UseTitle";
 
 const Home = () => {
   // const { services } = useContext(DataContext)
   const services = useLoaderData();
+  UseTitle("Home");
   //  const AscServices = [...services].sort((a, b) => b.id - a.id);
 
     console.log(services);
@@ -23,7 +25,7 @@ const Home = () => {
           </h1>
 
           <h2
-            role="contentinfo"
+          
             tabIndex={0}
             className="text-base leading-normal text-center text-gray-600 my-5 mb-10"
           >
@@ -61,14 +63,14 @@ const Home = () => {
                   <div className="md:w-2/3 w-full pb-6 md:pb-0 md:pr-6 flex-col md:block flex items-center justify-center md:pt-0 pt-4">
                     <div>
                       <h1
-                        role="heading"
+                      
                         className="text-xl md:text-2xl lg:text-4xl xl:text-4xl lg:w-10/12 text-white font-black leading-6 lg:leading-10 md:text-left text-center"
                       >
                         Become a member and start building the next big thing
                       </h1>
                     </div>
                     <button
-                      role="button"
+                   
                       aria-label="Join the community"
                       className="mt-5 lg:mt-8 py-3 lg:py-4 px-4 lg:px-8 bg-white font-bold text-indigo-700 rounded-lg text-sm lg:text-lg xl:text-xl hover:bg-opacity-90  focus:ring-2 focus:ring-offset-2 focus:ring-white focus:outline-none"
                     >

@@ -2,13 +2,15 @@ import React,{ useContext,useEffect,useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { DataContext, UserContext } from '../../Context/Context';
+import UseTitle from '../../hooks/UseTitle';
 
 const Reviews = () => {
   const { refresh, setRefresh, } = useContext(DataContext);
   const { user } = useContext(UserContext);
   const [reviews, setReviews] = useState([]);
   console.log(reviews);
-  const [reviewdata , setReview] = useState([]);
+  const [reviewdata,setReview] = useState([]);
+  UseTitle('Reviews');
 
  useEffect(() => {
   

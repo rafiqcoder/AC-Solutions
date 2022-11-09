@@ -4,11 +4,12 @@ import toast from 'react-hot-toast';
 import { Link,useLoaderData,useLocation } from 'react-router-dom';
 
 import { DataContext,UserContext } from '../../Context/Context';
+import UseTitle from "../../hooks/UseTitle";
 
 const ServiceDetails = () => {
     const {services,reviews} = useLoaderData();
     const [newReviews, setNewReviews] = useState(reviews);
- 
+    UseTitle('Service Details');
     const [service] = services;
    
     
