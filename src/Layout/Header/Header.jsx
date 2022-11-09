@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import { Link,NavLink } from "react-router-dom";
 import { UserContext } from "../../Context/Context";
 import MobileHeader from "./MobileHeader";
+import logo from "../../Assets/images/logo.jpg";
+
 
 const Header = () => {
   const { user, LogOut, initialPhoto, initialName } = useContext(UserContext);
@@ -26,11 +28,11 @@ const Header = () => {
   }
  
   return (
-    <header className="">
+    <header className="shadow 11/12">
       <div className=" hidden sm:flex navbar bg-base-100 h-[50px] ">
         <div className="navbar-start">
-          <NavLink to="/" className="btn btn-ghost normal-case text-xl">
-            AC Solution
+          <NavLink to="/" className=" normal-case text-xl flex justify-center items-center content-center">
+          <img src={logo} className='w-20 rounded-full' alt="" />  AC Solution
           </NavLink>
         </div>
         <div className="navbar-center hidden lg:flex">
