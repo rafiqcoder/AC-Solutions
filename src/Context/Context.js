@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, getAuth,GoogleAuthProvider,signInWithEmailAndPassword,signInWithPopup, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword,getAuth,GoogleAuthProvider,signInWithEmailAndPassword,signInWithPopup,updateProfile } from "firebase/auth";
 import React,{ createContext,useEffect,useState } from 'react';
 import { app } from '../firebase/firebase.config';
 
@@ -24,13 +24,9 @@ const Context = ({ children }) => {
             .catch(error => console.log(error))
     },[refresh]);
 
-    useEffect(() => {
-        fetch(`http://localhost:5000/reviews?email=${user?.email}`)
-            .then(res => res.json())
-            .then(data => setReviews(data))
-            .catch(error => console.log(error))
-    },[refresh,user]);
-    
+
+  
+
     const loginWithPassword = (email,password) => {
         setLoader(true);
         return signInWithEmailAndPassword(auth,email,password)
@@ -59,11 +55,11 @@ const Context = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
-           
-                setUser(user);
-                setLoader(false);
-          
-            
+
+            setUser(user);
+            setLoader(false);
+
+
         })
         return () => unsubscribe();
     },[auth])

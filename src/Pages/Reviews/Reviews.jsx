@@ -1,13 +1,34 @@
-import React,{ useContext,useState } from 'react';
+import React,{ useContext,useEffect,useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
-import { DataContext } from '../../Context/Context';
+import { DataContext, UserContext } from '../../Context/Context';
 
 const Reviews = () => {
-  const { reviews, refresh, setRefresh } = useContext(DataContext);
+  const { refresh, setRefresh, } = useContext(DataContext);
+  const { user } = useContext(UserContext);
+  const [reviews, setReviews] = useState([]);
   console.log(reviews);
   const [reviewdata , setReview] = useState([]);
 
+ useEffect(() => {
+  
+     fetch(`http://localhost:5000/reviews?email=${user?.email}`, {
+       headers: {
+         "Content-Type": "application/json",
+         authorization: `Bearer ${localStorage.getItem("auth-token")}`,
+       },
+     })
+       .then((res) => res.json())
+       .then((data) => {
+         console.log(data);
+
+         setReviews(data);
+       })
+       .catch((error) => console.log(error));
+   
+ },[setReviews,user]);
+  
+  
   const handleDelete = (id) => {
     const agree = window.confirm("Are you sure you want to delete this review?");
     if ( agree ) {
@@ -61,6 +82,12 @@ const Reviews = () => {
     popup.classList.remove("flex");
 
   };
+
+
+  
+
+
+
   return (
     <div className="overflow-x-auto w-full">
       <table className="table w-full">

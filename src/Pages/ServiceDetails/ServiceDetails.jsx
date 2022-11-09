@@ -64,7 +64,6 @@ const ServiceDetails = () => {
     }
   
 
-         
     return (
       <div>
         <div className="card justify-center p-10 bg-white rounded-lg shadow-2xl md:min-h-[350px] text-center items-center content-center">

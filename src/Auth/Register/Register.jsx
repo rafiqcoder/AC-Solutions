@@ -22,10 +22,27 @@ const Register = () => {
       .then((res) => {
         updateNameAndPhoto(name,img)
           .then((res) => {
+           
             toast.success('Registration Successful');
           })
           .catch((err) => {console.log(err)});
-      toast.success('Register Successfull');
+
+        const email = res.user.email;
+
+        fetch("http://localhost:5000/jwt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.token);
+
+            localStorage.setItem("auth-token", data.token);
+            toast.success("Login Successfull");
+          });
       console.log(res);
     })
     .catch((err) => {

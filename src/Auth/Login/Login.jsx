@@ -7,27 +7,66 @@ const Login = () => {
   const { googleLogin, loginWithPassword } =
     useContext(UserContext);
   
+  
+  
+  
   const handleLogin = (e) => {
     e.preventDefault()
     const email = e.target.email.value;
     const password = e.target.password.value;
-   
-    loginWithPassword(email,password)
-      .then(res => res.json())
-      .then(data => {
-        toast.success('Login Successfull');
-      })
-      .catch(err => console.log(err))
     
-  }
+    loginWithPassword(email,password)
+      
+      .then(result => {
+        console.log(result.user.email);
+        const email = result.user.email;
+        console.log(email);
+        
+        fetch("http://localhost:5000/jwt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({email}),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.token);
+            
+              localStorage.setItem("auth-token", data.token);
+              toast.success("Login Successfull");
+              
+            }
+          )
+        //   .catch((err) => console.log(err));
+    
+      })
+          .catch(err => console.log(err))
 
-
+    }
 
 
   const handleGoogleLogin = () => {
     googleLogin()
       .then((result => {
-        console.log(result);
+        
+        const email = result.user.email;
+       
+
+        fetch("http://localhost:5000/jwt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.token);
+
+            localStorage.setItem("auth-token", data.token);
+            toast.success("Login Successfull");
+          });
       }))
     
       .catch(error => {
