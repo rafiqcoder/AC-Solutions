@@ -8,7 +8,7 @@ const Reviews = () => {
   const { refresh, setRefresh, } = useContext(DataContext);
   const { user } = useContext(UserContext);
   const [reviews, setReviews] = useState([]);
-  console.log(reviews);
+  console.log(reviews.length);
   const [reviewdata,setReview] = useState([]);
   UseTitle('Reviews');
 
@@ -28,7 +28,7 @@ const Reviews = () => {
        })
        .catch((error) => console.log(error));
    
- },[setReviews,user]);
+ },[setReviews,user,refresh]);
   
   
   const handleDelete = (id) => {
@@ -92,75 +92,80 @@ const Reviews = () => {
 
   return (
     <div className="overflow-x-auto w-full">
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reviews.map((review) => (
-            <tr key={review._id}>
+      {reviews.length === 0 ? (
+        <div className="flex justify-center items-center uppercase font-bold w-vw h-screen text-2xl">
+          No review were Added
+        </div>
+      ) : (
+        <table className="table w-full h-screen">
+          <thead>
+            <tr>
               <th>
-                <label>
+                <label className=" bg-gray-400">
                   <input type="checkbox" className="checkbox" />
                 </label>
               </th>
-              <td>
-                <div className="flex items-center space-x-3">
-                  <div>
-                    <div className="font-bold">{review.serviceName}</div>
-                  </div>
-                </div>
-              </td>
-              <td className="text-sm">
-                {review.reviewMsg}
-                <br />
-                <span className="badge badge-ghost badge-sm">
-                  {" "}
-                  Support Technician
-                </span>
-              </td>
-              <td>{review.price}</td>
-
-              <th>
-                <Link
-                  // to={`/Reviews/${review._id}`}
-
-                  className="btn btn-primary mr-3 text-white btn-xs"
-                  onClick={() => handleEdit(review._id)}
-                >
-                  Edit
-                </Link>
-                <Link
-                  className="btn bg-red-800 text-white btn-xs"
-                  onClick={() => handleDelete(review._id)}
-                >
-                  X
-                </Link>
-              </th>
+              <th>Name</th>
+              <th>Job</th>
+              <th>Favorite Color</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
-            <th></th>
-          </tr>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            {reviews.map((review) => (
+              <tr key={review._id}>
+                <th>
+                  <label>
+                    <input type="checkbox" className="checkbox" />
+                  </label>
+                </th>
+                <td>
+                  <div className="flex items-center space-x-3 " >
+                    <div>
+                      <div className="font-bold" >{review.serviceName}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="text-sm">
+                  {review.reviewMsg}
+                  <br />
+                  <span className="badge badge-ghost badge-sm">
+                    {" "}
+                    Support Technician
+                  </span>
+                </td>
+                <td>{review.price}</td>
 
+                <th>
+                  <Link
+                    // to={`/Reviews/${review._id}`}
+
+                    className="btn btn-primary mr-3 text-white btn-xs"
+                    onClick={() => handleEdit(review._id)}
+                  >
+                    Edit
+                  </Link>
+                  <Link
+                    className="btn bg-red-800 text-white btn-xs"
+                    onClick={() => handleDelete(review._id)}
+                  >
+                    X
+                  </Link>
+                </th>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Job</th>
+              <th>Favorite Color</th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      )}
       <div
         id="popup"
         className="hidden z-50 fixed w-full justify-center inset-0"
@@ -202,7 +207,8 @@ const Reviews = () => {
               >
                 <div className="mt-11">
                   <div className="mt-8">
-                    <textarea name='updatedMsg'
+                    <textarea
+                      name="updatedMsg"
                       defaultValue={reviewdata.reviewMsg}
                       className="py-3 pl-3 overflow-y-auto h-24 border rounded border-gray-200 w-full resize-none focus:outline-none"
                     />
@@ -215,10 +221,7 @@ const Reviews = () => {
                   >
                     Cancel
                   </button>
-                  <button
-                   
-                    className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white"
-                  >
+                  <button className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">
                     Update Review
                   </button>
                 </div>

@@ -1,6 +1,6 @@
 import React,{ useContext } from 'react';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link,useLocation,useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Context/Context';
 import UseTitle from '../../hooks/UseTitle';
 
@@ -8,8 +8,9 @@ const Login = () => {
   const { googleLogin, loginWithPassword } =
     useContext(UserContext);
     UseTitle('Login');
-  
-  
+  const location = useLocation();
+  const navigate = useNavigate()
+  const from = location.state?.from?.pathname || '/';
   
   const handleLogin = (e) => {
     e.preventDefault()
@@ -35,8 +36,9 @@ const Login = () => {
             console.log(data.token);
             
               localStorage.setItem("auth-token", data.token);
-              toast.success("Login Successfull");
+            toast.success("Login Successfull");
               
+              navigate(from,{replace:true});
             }
           )
         //   .catch((err) => console.log(err));
@@ -65,8 +67,10 @@ const Login = () => {
           .then((data) => {
             console.log(data.token);
 
-            localStorage.setItem("auth-token", data.token);
+            localStorage.setItem("auth-token",data.token);
+            
             toast.success("Login Successfull");
+             navigate(from, { replace: true });
           });
       }))
     

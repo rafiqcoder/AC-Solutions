@@ -169,7 +169,7 @@ const ServiceDetails = () => {
               </div>
             </div>
           ))}
-          <Link className="btn mt-10">show all reviews</Link>
+        
         </div>
       </div>
     );
