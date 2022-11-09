@@ -1,18 +1,28 @@
-import React from 'react';
-import { useContext } from 'react';
+import React,{ useContext } from 'react';
+import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../Context/Context';
 
 const Login = () => {
-  const { googleLogin } = useContext(UserContext);
+  const { googleLogin, loginWithPassword } =
+    useContext(UserContext);
   
-
   const handleLogin = (e) => {
-    // e.preventDefault()
-    // const email = e.target.email.value;
-    // const password = e.target.password.value;
+    e.preventDefault()
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+   
+    loginWithPassword(email,password)
+      .then(res => res.json())
+      .then(data => {
+        toast.success('Login Successfull');
+      })
+      .catch(err => console.log(err))
     
   }
+
+
+
 
   const handleGoogleLogin = () => {
     googleLogin()
@@ -137,6 +147,7 @@ const Login = () => {
                 Already Have One ? Login
               </p>
 
+              
               <div>
                 <label className="text-sm font-medium leading-none text-gray-800">
                   Email

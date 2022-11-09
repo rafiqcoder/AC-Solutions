@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const MobileHeader = () => {
+const MobileHeader = ({ initialName ,user,photo,handleLogout}) => {
   return (
     <div className=" sm:hidden navbar">
       <div className="navbar-start">
@@ -38,12 +38,16 @@ const MobileHeader = () => {
             <li>
               <NavLink to="/services">Services</NavLink>
             </li>
-            <li>
-              <NavLink to="/reviews">My Reviews</NavLink>
-            </li>
-            <li>
-              <NavLink to="/add-service">Add Service</NavLink>
-            </li>
+            {user && user.uid && (
+              <div className="">
+                <li>
+                  <NavLink to="/reviews">My Reviews</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/add-service">Add Service</NavLink>
+                </li>
+              </div>
+            )}
             <li>
               <NavLink to="/blog">Blog</NavLink>
             </li>
@@ -51,7 +55,9 @@ const MobileHeader = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <NavLink className="btn btn-ghost normal-case text-xl">AC Solution</NavLink>
+        <NavLink className="btn btn-ghost normal-case text-xl">
+          AC Solution
+        </NavLink>
       </div>
       <div className="navbar-end">
         <button className="btn btn-ghost btn-circle">
@@ -73,7 +79,7 @@ const MobileHeader = () => {
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-10 rounded-full">
-              <img alt="" src="https://placeimg.com/80/80/people" />
+              <img alt="" src={photo} />
             </div>
           </label>
           <ul
@@ -82,16 +88,30 @@ const MobileHeader = () => {
           >
             <li>
               <a href="/" className="justify-between">
-                Profile
-                <span className="badge">New</span>
+                <span className="justify-between">
+                  {initialName ? initialName : user?.displayName}
+                </span>
               </a>
             </li>
             <li>
               <a href="/">Settings</a>
             </li>
-            <li>
-              <a href="/">Logout</a>
-            </li>
+            {user && user.uid ? (
+              <NavLink
+                to="/login"
+                className="btn-outline btn-warning border rounded-r-full rounded-l-full py-[2px] px-3"
+                onClick={handleLogout}
+              >
+                Logout
+              </NavLink>
+            ) : (
+              <NavLink
+                to="/login"
+                className="btn-outline btn-warning border rounded-r-full rounded-l-full py-[2px] px-3"
+              >
+                Login
+              </NavLink>
+            )}
           </ul>
         </div>
       </div>

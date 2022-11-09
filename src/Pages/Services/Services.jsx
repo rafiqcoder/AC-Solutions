@@ -66,9 +66,9 @@ const Services = () => {
         <div className="flex items-center justify-center xl:w-10/12 mx-auto mb-10 -mt-10">
           <div className="grid  sm:grid-cols-3 gap-4 justify-center items-center  -mt-20">
             {datas.map((service) => (
-              <Card service={service} key={service._id}>
+              <Card service={service} key={service?._id}>
                 <Link
-                  to={`/services/${service._id}`}
+                  to={`/services/${service?._id}`}
                   className="px-4 py-1 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none text-sm"
                 >
                  View Details

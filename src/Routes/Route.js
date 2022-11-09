@@ -23,7 +23,6 @@ const Route = () => {
                 {
                     path: '/',element: <Home></Home>,
                     loader: () => fetch('http://localhost:5000/home')
-
                 },
                 {
                     path: '/blog',element: <Blog></Blog>

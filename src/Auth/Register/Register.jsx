@@ -1,11 +1,37 @@
-import React from 'react';
+import React,{ useContext } from 'react';
+import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../Context/Context';
 
 const Register = () => {
-
+  const {
+    registerWithPassword,
+    updateNameAndPhoto,
+    setinitialPhoto,  setinitialName
+  } = useContext(UserContext);
   const handleRegisiter = (e) => {
-  
+    e.preventDefault();
    
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+     const img = e.target.img.value;
+    const name = e.target.name.value;
+    setinitialName(name);
+    setinitialPhoto(img);
+    registerWithPassword(email,password)
+      .then((res) => {
+        updateNameAndPhoto(name,img)
+          .then((res) => {
+            toast.success('Registration Successful');
+          })
+          .catch((err) => {console.log(err)});
+      toast.success('Register Successfull');
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   }
   
     return (
@@ -22,22 +48,34 @@ const Register = () => {
             >
               Create your account
             </p>
-
             <div>
               <label className="text-sm font-medium leading-none text-gray-800">
-                Name
+                Image Link
               </label>
               <input
-                type="text" name='name'
+                type="text"
+                name="img"
                 className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
               />
             </div>
             <div>
               <label className="text-sm font-medium leading-none text-gray-800">
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium leading-none text-gray-800">
                 Email
               </label>
               <input
-                type="email" name='email'
+                type="email"
+                name="email"
                 className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
               />
             </div>
@@ -47,8 +85,8 @@ const Register = () => {
               </label>
               <div className="relative flex items-center justify-center">
                 <input
-              
-                  type="password" name='password'
+                  type="password"
+                  name="password"
                   className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"
                 />
                 <div className="absolute right-0 mt-2 mr-3 cursor-pointer">
@@ -67,23 +105,18 @@ const Register = () => {
                 </div>
               </div>
             </div>
-          
-              <button
-                type="submit"
-               
-                className="focus:ring-2 mt-8 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full"
-              >
-                Create my account
-              </button>
-            
+
+            <button
+              type="submit"
+              className="focus:ring-2 mt-8 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full"
+            >
+              Create my account
+            </button>
           </form>
           <p className="text-sm mt-4 font-medium leading-none text-gray-500">
             Already have account?
             <Link
               to="/login"
-             
-           
-            
               className="text-sm font-medium leading-none underline text-gray-800 cursor-pointer"
             >
               Login here

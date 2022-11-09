@@ -41,7 +41,7 @@ const Blog = () => {
           <div className="lg:w-1/2">
             <img
               alt=" "
-              alt=""
+             
               src="https://cdn.tuk.dev/assets/components/111220/blg-17/blog1.png"
               className="w-full"
             />
