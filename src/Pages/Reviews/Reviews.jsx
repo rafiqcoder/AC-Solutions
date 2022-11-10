@@ -1,20 +1,28 @@
 import React,{ useContext,useEffect,useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
-import { DataContext, UserContext } from '../../Context/Context';
+import { DataContext,UserContext } from '../../Context/Context';
 import UseTitle from '../../hooks/UseTitle';
 
 const Reviews = () => {
   const { refresh, setRefresh, } = useContext(DataContext);
   const { user } = useContext(UserContext);
-  const [reviews, setReviews] = useState([]);
-  console.log(reviews.length);
+
+  //loading state
+  const [loadReview,setLoadReview] = useState(true);
+
+  //storing data that get by email
+  const [reviews,setReviews] = useState([]);
+  
+  // state to keep single review for editing
   const [reviewdata,setReview] = useState([]);
+  
   UseTitle('Reviews');
 
- useEffect(() => {
-  
-     fetch(`http://localhost:5000/reviews?email=${user?.email}`, {
+  //getting reviews by email
+  useEffect(() => {
+  // getting reviews from backend and sending user token in header
+     fetch(`https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/reviews?email=${user?.email}`, {
        headers: {
          "Content-Type": "application/json",
          authorization: `Bearer ${localStorage.getItem("auth-token")}`,
@@ -22,19 +30,21 @@ const Reviews = () => {
      })
        .then((res) => res.json())
        .then((data) => {
-         console.log(data);
-
+        //seting reviews
          setReviews(data);
+        //setting loading state to false
+         setLoadReview(false);
        })
        .catch((error) => console.log(error));
-   
  },[setReviews,user,refresh]);
   
   
   const handleDelete = (id) => {
+    // asking user to confirm delete
     const agree = window.confirm("Are you sure you want to delete this review?");
-    if ( agree ) {
-      fetch(`http://localhost:5000/reviews/${id}`, {
+    if (agree) {
+      // sending delete request to backend
+      fetch(`https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/reviews/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -49,18 +59,21 @@ const Reviews = () => {
       
     
   };
+  // handler function for update review
   const updateReview = (e) => {
     e.preventDefault();
     const form = e.target;
     const reviewMsg = form.updatedMsg.value;
-    fetch(`http://localhost:5000/review-update/${reviewdata._id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ reviewMsg }),
-    })
+    // sending update request to backend
+      fetch(`https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/review-update/${reviewdata._id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ reviewMsg }),
+      })
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "updated") {
+          //showing success message
           toast.success("Review Updated Successfully");
 
           setRefresh(!refresh);
@@ -70,6 +83,8 @@ const Reviews = () => {
         }
       });
   }
+
+  // click handler for to open popup
   const handleEdit=(id)=> {
     const popup = document.getElementById("popup");
     popup.classList.remove("hidden");
@@ -78,6 +93,7 @@ const Reviews = () => {
     setReview(review);
 
   }
+  // click handler for to close popup
   const closepopup = () => {
     const popup = document.getElementById("popup");
     popup.classList.add("hidden");
@@ -85,61 +101,79 @@ const Reviews = () => {
 
   };
 
-
-  
-
-
+  // loding spinner
+   if (loadReview) {
+     return (
+       <div className="bg-gray-100">
+         <div className=" rounded relative">
+           <div className="rounded-full bg-indigo-200 w-[190px] h-[190px] relative flex justify-center items-center mx-auto animate-spin">
+             <svg
+               className="absolute top-[2px] right-0"
+               width={76}
+               height={97}
+               viewBox="0 0 76 97"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+             >
+               <mask id="path-1-inside-1_2495_2146" fill="white">
+                 <path d="M76 97C76 75.6829 69.2552 54.9123 56.7313 37.6621C44.2074 20.4118 26.5466 7.56643 6.27743 0.964994L0.0860505 19.9752C16.343 25.2698 30.5078 35.5725 40.5526 49.408C50.5974 63.2436 56.007 79.9026 56.007 97H76Z" />
+               </mask>
+               <path
+                 d="M76 97C76 75.6829 69.2552 54.9123 56.7313 37.6621C44.2074 20.4118 26.5466 7.56643 6.27743 0.964994L0.0860505 19.9752C16.343 25.2698 30.5078 35.5725 40.5526 49.408C50.5974 63.2436 56.007 79.9026 56.007 97H76Z"
+                 stroke="#4338CA"
+                 strokeWidth={40}
+                 mask="url(#path-1-inside-1_2495_2146)"
+               />
+             </svg>
+             <div className="rounded-full bg-white w-[150px] h-[150px]" />
+           </div>
+           <p className="absolute mx-auto inset-x-0 my-auto inset-y-[80px] text-base font-medium text-gray-800 text-center">
+             Loading ...
+           </p>
+         </div>
+       </div>
+     );
+   }
 
   return (
-    <div className="overflow-x-auto w-full">
-      {reviews.length === 0 ? (
-        <div className="flex justify-center items-center uppercase font-bold w-vw h-screen text-2xl">
-          No review were Added
-        </div>
-      ) : (
-        <table className="table w-full h-screen">
-          <thead>
+    <div
+      className={`sm:overflow-x-auto w-full flex flex-cols ${
+        reviews.length === 0 && "justify-center"
+      }`}
+    >
+      {reviews.length > 0 ? (
+        <table className=" sm:w-full mx-auto">
+          <thead className="hidden">
             <tr>
-              <th>
-                <label className=" bg-gray-400">
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
               <th>Name</th>
               <th>Job</th>
               <th>Favorite Color</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-10 text-center ">
             {reviews.map((review) => (
-              <tr key={review._id}>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
+              <tr
+                key={review._id}
+                className="flex flex-col w-[300px] bg-white justify-center p-6 rounded-lg"
+              >
                 <td>
-                  <div className="flex items-center space-x-3 " >
-                    <div>
-                      <div className="font-bold" >{review.serviceName}</div>
+                  <div className="flex items-center space-x-3 justify-center ">
+                    <div className="">
+                      <h2 className="font-bold text-center">
+                        {review.serviceName}
+                      </h2>
                     </div>
                   </div>
                 </td>
                 <td className="text-sm">
                   {review.reviewMsg}
                   <br />
-                  <span className="badge badge-ghost badge-sm">
-                    {" "}
-                    Support Technician
-                  </span>
                 </td>
                 <td>{review.price}</td>
 
-                <th>
+                <th className="mt-6">
                   <Link
-                    // to={`/Reviews/${review._id}`}
-
                     className="btn btn-primary mr-3 text-white btn-xs"
                     onClick={() => handleEdit(review._id)}
                   >
@@ -155,17 +189,14 @@ const Reviews = () => {
               </tr>
             ))}
           </tbody>
-          <tfoot>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
-              <th></th>
-            </tr>
-          </tfoot>
         </table>
+      ) : (
+          // showing message if no review found
+        <div className="flex  justify-center content-center items-center uppercase font-bold w-vw h-screen text-2xl text-center">
+          <h1 className="text-center w-full">No review were Added</h1>
+        </div>
       )}
+      {/* popup for update review */}
       <div
         id="popup"
         className="hidden z-50 fixed w-full justify-center inset-0"

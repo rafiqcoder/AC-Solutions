@@ -56,7 +56,7 @@ const MobileHeader = ({ initialName ,user,photo,handleLogout}) => {
       </div>
       <div className="navbar-center">
         <NavLink className="btn btn-ghost normal-case text-xl">
-          AC Solution
+          AC Solutions
         </NavLink>
       </div>
       <div className="navbar-end">

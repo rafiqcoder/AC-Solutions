@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+// Title Hook
 
 const UseTitle = (title) => {
     useEffect(() => {

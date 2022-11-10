@@ -1,30 +1,74 @@
-import React,{ useContext } from 'react';
+import React,{ useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link,useLocation,useNavigate } from 'react-router-dom';
-import { UserContext } from '../../Context/Context';
+import { DataContext,UserContext } from '../../Context/Context';
 import UseTitle from '../../hooks/UseTitle';
 
 const Login = () => {
   const { googleLogin, loginWithPassword } =
     useContext(UserContext);
-    UseTitle('Login');
-  const location = useLocation();
-  const navigate = useNavigate()
-  const from = location.state?.from?.pathname || '/';
+  const { error,setError } = useState('');
+  // loading state
+  const [loadLogin, setLoadLogin] = useState(false);
+  UseTitle('Login');
+
+   const location = useLocation();
+   const navigate = useNavigate();
   
+  
+  const from = location.state?.from?.pathname || '/';
+  // conditonal rendering loading for login
+  if (loadLogin) {
+    
+    return (
+      <div className="bg-gray-100">
+        <div className=" rounded relative">
+          <div className="rounded-full bg-indigo-200 w-[190px] h-[190px] relative flex justify-center items-center mx-auto animate-spin">
+            <svg
+              className="absolute top-[2px] right-0"
+              width={76}
+              height={97}
+              viewBox="0 0 76 97"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask id="path-1-inside-1_2495_2146" fill="white">
+                <path d="M76 97C76 75.6829 69.2552 54.9123 56.7313 37.6621C44.2074 20.4118 26.5466 7.56643 6.27743 0.964994L0.0860505 19.9752C16.343 25.2698 30.5078 35.5725 40.5526 49.408C50.5974 63.2436 56.007 79.9026 56.007 97H76Z" />
+              </mask>
+              <path
+                d="M76 97C76 75.6829 69.2552 54.9123 56.7313 37.6621C44.2074 20.4118 26.5466 7.56643 6.27743 0.964994L0.0860505 19.9752C16.343 25.2698 30.5078 35.5725 40.5526 49.408C50.5974 63.2436 56.007 79.9026 56.007 97H76Z"
+                stroke="#4338CA"
+                strokeWidth={40}
+                mask="url(#path-1-inside-1_2495_2146)"
+              />
+            </svg>
+            <div className="rounded-full bg-white w-[150px] h-[150px]" />
+          </div>
+          <p className="absolute mx-auto inset-x-0 my-auto inset-y-[80px] text-base font-medium text-gray-800 text-center">
+            Loading ...
+          </p>
+        </div>
+      </div>
+    );
+  }
+  // login with email and pasqword and setting laoding to true
   const handleLogin = (e) => {
+    
     e.preventDefault()
+     setLoadLogin(true)
     const email = e.target.email.value;
     const password = e.target.password.value;
     
     loginWithPassword(email,password)
       
       .then(result => {
-        console.log(result.user.email);
+       
         const email = result.user.email;
-        console.log(email);
-        
-        fetch("http://localhost:5000/jwt", {
+        // setting loading to false
+        setLoadLogin(false)
+
+        //fetching user jwt token and seting in local storage when user login
+        fetch("https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/jwt", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -33,54 +77,69 @@ const Login = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data.token);
+            // setting jwt token in local storage
             
-              localStorage.setItem("auth-token", data.token);
-            toast.success("Login Successfull");
-              
-              navigate(from,{replace:true});
-            }
-          )
-        //   .catch((err) => console.log(err));
-    
-      })
-          .catch(err => console.log(err))
-
-    }
-
-
-  const handleGoogleLogin = () => {
-    googleLogin()
-      .then((result => {
-        
-        const email = result.user.email;
-       
-
-        fetch("http://localhost:5000/jwt", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data.token);
-
             localStorage.setItem("auth-token",data.token);
             
             toast.success("Login Successfull");
-             navigate(from, { replace: true });
+              // redirecting to previous location
+              navigate(from,{replace:true});
+            }
+        )
+        .catch((err) => {
+          console.log(err);
+          setError(err.message);
+        });
+        
+      })
+      .catch(err => {
+        // setting loading to false
+        setLoadLogin(false)
+        setError(err.message)
+      
+      })
+    
+
+    }
+
+    // login with google
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then((result => {
+        const email = result.user.email;
+
+        // seting loading false when login successfull
+        setLoadLogin(false);
+        //fetching user jwt token and seting in local storage when user login
+        fetch(
+          "https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/jwt",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            // setting jwt token in local storage
+            localStorage.setItem("auth-token", data.token);
+
+            toast.success("Login Successfull");
+            navigate(from, { replace: true });
           });
       }))
     
       .catch(error => {
-        console.log(error);
+           setLoadLogin(false);
+        setError(error.message);
       })
   }
 
     return (
       <div className="h-full bg-gradient-to-tl from-green-400 to-indigo-900 w-full py-16 px-4">
+      
         <div className="flex flex-col items-center justify-center">
           <div className="bg-white shadow rounded lg:w-1/3  md:w-1/2 w-full p-10 mt-16">
             <p
@@ -102,8 +161,8 @@ const Login = () => {
                 Sign up here
               </Link>
             </p>
-            <button 
-              onClick={handleGoogleLogin} 
+            <button
+              onClick={handleGoogleLogin}
               className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10"
             >
               <svg
@@ -155,7 +214,6 @@ const Login = () => {
               </p>
             </button>
             <button
-             
               aria-label="Continue with twitter"
               className="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4"
             >
@@ -191,7 +249,6 @@ const Login = () => {
                 Already Have One ? Login
               </p>
 
-              
               <div>
                 <label className="text-sm font-medium leading-none text-gray-800">
                   Email
@@ -228,7 +285,8 @@ const Login = () => {
                   </div>
                 </div>
               </div>
-
+              {error &&  <p className="text-red-500 text-xs font-medium mt-2">{error}</p>
+              }
               <button
                 type="submit"
                 className="focus:ring-2 mt-8 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full"

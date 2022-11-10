@@ -1,39 +1,97 @@
 import React,{ useContext } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Context/Context';
 import UseTitle from '../../hooks/UseTitle';
 
 const Register = () => {
+  // geting firebase register function from context
   const {
     registerWithPassword,
     updateNameAndPhoto,
-    setinitialPhoto,  setinitialName
+    setinitialPhoto,
+    setinitialName,
   } = useContext(UserContext);
+  const [loading,setLoading] = useState(false)
+  const [error,setError] = useState('')
 
+  // getting location from react-router-dom
+     const location = useLocation();
+     const navigate = useNavigate();
+
+     const from = location.state?.from?.pathname || "/";
+
+  // setting title
   UseTitle('Register');
 
+
+  // showing loader  when user click on register button
+  if (loading) {
+    return (
+      <div className="bg-gray-100">
+        <div className=" rounded relative">
+          <div className="rounded-full bg-indigo-200 w-[190px] h-[190px] relative flex justify-center items-center mx-auto animate-spin">
+            <svg
+              className="absolute top-[2px] right-0"
+              width={76}
+              height={97}
+              viewBox="0 0 76 97"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask id="path-1-inside-1_2495_2146" fill="white">
+                <path d="M76 97C76 75.6829 69.2552 54.9123 56.7313 37.6621C44.2074 20.4118 26.5466 7.56643 6.27743 0.964994L0.0860505 19.9752C16.343 25.2698 30.5078 35.5725 40.5526 49.408C50.5974 63.2436 56.007 79.9026 56.007 97H76Z" />
+              </mask>
+              <path
+                d="M76 97C76 75.6829 69.2552 54.9123 56.7313 37.6621C44.2074 20.4118 26.5466 7.56643 6.27743 0.964994L0.0860505 19.9752C16.343 25.2698 30.5078 35.5725 40.5526 49.408C50.5974 63.2436 56.007 79.9026 56.007 97H76Z"
+                stroke="#4338CA"
+                strokeWidth={40}
+                mask="url(#path-1-inside-1_2495_2146)"
+              />
+            </svg>
+            <div className="rounded-full bg-white w-[150px] h-[150px]" />
+          </div>
+          <p className="absolute mx-auto inset-x-0 my-auto inset-y-[80px] text-base font-medium text-gray-800 text-center">
+            Loading ...
+          </p>
+        </div>
+      </div>
+    );
+  }
+  // register function
   const handleRegisiter = (e) => {
     e.preventDefault();
-   
+    //setting loading to true
+    setLoading(true);
+     
     const email = e.target.email.value;
     const password = e.target.password.value;
      const img = e.target.img.value;
     const name = e.target.name.value;
+
+    //setting initial name and photo
     setinitialName(name);
     setinitialPhoto(img);
+
+    // calling firebase register function
     registerWithPassword(email,password)
       .then((res) => {
         updateNameAndPhoto(name,img)
           .then((res) => {
            
             toast.success('Registration Successful');
+           
           })
-          .catch((err) => {console.log(err)});
+          .catch((err) => {
+             setLoading(false);
+            console.log(err)
+          }
+          );
 
         const email = res.user.email;
-
-        fetch("http://localhost:5000/jwt", {
+          //getting jwt token from backend and setting it in localstorage
+        fetch("https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/jwt", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -42,17 +100,20 @@ const Register = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data.token);
-
+            // seting loading to false
+            setLoading(false);
+            // setting jwt token in localstorage
             localStorage.setItem("auth-token", data.token);
             toast.success("Login Successfull");
           });
-      console.log(res);
+      
+        navigate(from, { replace: true });
     })
     .catch((err) => {
       console.log(err);
+       setLoading(false);
+      setError(err.message)
     });
-
   }
   
     return (
@@ -126,7 +187,9 @@ const Register = () => {
                 </div>
               </div>
             </div>
-
+            {
+              error && <p className="text-red-500 text-xs mt-2">{error}</p>
+            }
             <button
               type="submit"
               className="focus:ring-2 mt-8 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full"

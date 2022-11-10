@@ -2,9 +2,11 @@ import React from "react";
 import UseTitle from "../../hooks/UseTitle";
 
 const Blog = () => {
+  //seting title
   UseTitle("Blog");
+  
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 mt-20">
       <div className="relative py-16 bg-gradient-to-b from-indigo-700 to-indigo-600 flex justify-center items-center">
         <div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-10 text-white">

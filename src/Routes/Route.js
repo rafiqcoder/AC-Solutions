@@ -13,8 +13,6 @@ import PrivateRoute from "./PrivateRoute";
 
 
 const Route = () => {
-    
-
 
     const router = createBrowserRouter([
         {
@@ -22,7 +20,7 @@ const Route = () => {
             children: [
                 {
                     path: '/',element: <Home></Home>,
-                    loader: () => fetch('http://localhost:5000/home')
+                    loader: () => fetch('https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/home')
                 },
                 {
                     path: '/blog',element: <Blog></Blog>
@@ -33,7 +31,7 @@ const Route = () => {
                 {
                     path: '/services/:id',element: <ServiceDetails />,
                     loader: ({ params }) => {
-                        return fetch(`http://localhost:5000/services/${params.id}`)
+                        return fetch(`https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/services/${params.id}`)
                     }
                 },
                 {
@@ -57,14 +55,11 @@ const Route = () => {
                 {
                     path: '*',element: <NotFound />
                 },
-                // {
-                //     path: '/reviews/:id',
-                //     loader: ({ params }) => {
-                //         return fetch(`http://localhost:5000/review/${params.id}`)
-                //     },
-                //     element: <UpdateReview />
-                // },
+              
             ]
+        },
+        {
+            path: '*',element: <NotFound />
         },
     ])
     return (

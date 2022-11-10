@@ -1,38 +1,43 @@
 import React,{ useContext } from "react";
 import toast from "react-hot-toast";
-import { Link,NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import logo from "../../Assets/images/logo.jpg";
 import { UserContext } from "../../Context/Context";
 import MobileHeader from "./MobileHeader";
-import logo from "../../Assets/images/logo.jpg";
 
 
 const Header = () => {
-  const { user, LogOut, initialPhoto, initialName } = useContext(UserContext);
+  const { user,LogOut,initialPhoto,initialName } = useContext(UserContext);
+  
+  //logout
   const handleLogout = () => {
-    LogOut()
-    .then((result) => {
+    LogOut().then((result) => {
       toast.success("Logged Out Successfully");
-    })
-  }
-  console.log(initialPhoto);
-  let photo='';
-  if (user&&user.uid) {
-    if (initialPhoto !== '') {
+    });
+  };
+
+  // seting user photo
+  let photo = "";
+  if (user && user.uid) {
+    if (initialPhoto !== "") {
       photo = initialPhoto;
-      console.log(initialPhoto);
     } else {
       photo = user.photoURL;
     }
   } else {
+    //if user is not logged in
     photo = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
   }
- 
+  // desktop header
   return (
     <header className="shadow 11/12">
-      <div className=" hidden sm:flex navbar bg-base-100 h-[50px] ">
+      <div className=" hidden sm:flex navbar bg-base-100 h-[50px] w-[1440px] mx-auto ">
         <div className="navbar-start">
-          <NavLink to="/" className=" normal-case text-xl flex justify-center items-center content-center">
-          <img src={logo} className='w-20 rounded-full' alt="" />  AC Solution
+          <NavLink
+            to="/"
+            className=" normal-case text-xl flex justify-center items-center content-center"
+          >
+            <img src={logo} className="w-20 rounded-full" alt="" /> AC Solutions
           </NavLink>
         </div>
         <div className="navbar-center hidden lg:flex">
@@ -48,6 +53,8 @@ const Header = () => {
             <li>
               <NavLink to="/services">Services</NavLink>
             </li>
+            {//if user is logged in then show My Reviews and Add service
+            }
             {user && user.uid && (
               <div className="flex">
                 <li>
@@ -64,6 +71,9 @@ const Header = () => {
           </ul>
         </div>
         <div className="navbar-end">
+          {
+            //if user is logged in then show user photo and logout button
+          }
           {user && user.uid ? (
             <NavLink
               to="/login"

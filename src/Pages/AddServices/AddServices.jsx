@@ -1,34 +1,34 @@
-import React,{ useContext,useEffect,useState } from 'react';
+import React,{ useContext } from 'react';
 import toast from 'react-hot-toast';
 import { DataContext } from '../../Context/Context';
 import UseTitle from '../../hooks/UseTitle';
 
 const AddServices = () => {
-  const [order,setOrder] = useState(1);
-  const { services,refresh,setRefresh } = useContext(DataContext);
 
-  UseTitle('Add Services');
+  const { refresh, setRefresh } = useContext(DataContext);
 
-  useEffect(() => {
-    setOrder(services.length + 1);
-  },[services])
-  console.log(order);
+  //seting title
+  UseTitle("Add Services");
+
+
+
   const handleAddService = (e) => {
     e.preventDefault();
-
     const form = e.target;
-    const id = order;
     const name = form.name.value;
     const price = form.price.value;
     const desc = form.desc.value;
     const image = form.img.value;
-    const service = { name, price, desc, image, id };
-
-    fetch("http://localhost:5000/add-service", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(service),
-    })
+    const service = { name, price, desc, image};
+    // inserting new service
+    fetch(
+      "https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/add-service",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(service),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.data.acknowledged) {

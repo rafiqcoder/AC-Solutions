@@ -2,13 +2,14 @@ import React from 'react';
 import { PhotoProvider,PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 
-const Card = ({service,children}) => {
+const Card = ({ service,children }) => {
+  // reciving detail button and services from props
     return (
       <div className="card justify-center p-10 bg-white rounded-lg shadow-2xl md:min-h-[350px]">
         <div className="prod-title">
-          <p className="text-xl mb-3 uppercase text-gray-900 font-bold">
+          <h2 className="text-xl mb-3 uppercase text-gray-900 font-bold">
             {service?.name}
-          </p>
+          </h2>
         </div>
         <div className="prod-img">
           <PhotoProvider>
@@ -22,9 +23,9 @@ const Card = ({service,children}) => {
           </PhotoProvider>
         </div>
         <div className="prod-info grid gap-10 mt-5">
-          <p className="text-sm text-gray-400">{service?.desc.slice(0 - 100)+'...'}</p>
+          <p className="text-sm text-gray-400 font-thin">{service?.desc.slice(0-100)}</p>
           <div className="flex flex-col md:flex-row justify-between items-center text-gray-900">
-            <p className="font-bold text-xl">{service?.price} $</p>
+            <h3 className="font-bold text-xl">{service?.price} $</h3>
             {children}
           </div>
         </div>

@@ -5,9 +5,11 @@ import Header from './Header/Header';
 
 const Main = () => {
     return (
-        <div className='max-w-[1140px] mx-auto bg-gray-100'>
+        <div className='max-w-[1440px] mx-auto bg-purple-50'>
             <Header />
-            <Outlet></Outlet>
+            <div className=" mt-16">
+                <Outlet></Outlet>
+            </div>
             <Footer></Footer>
         </div>
     );
