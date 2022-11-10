@@ -24,7 +24,9 @@ const ServiceDetails = () => {
  
     ///fetching reviews from backend
       useEffect(() => {
-        fetch(`http://localhost:5000/services/${service._id}`)
+        fetch(
+          `https://acsolutions-server-n403euqde-rafiqcoder.vercel.app/services/${service._id}`
+        )
           .then((res) => res.json())
           .then((data) => {
             setNewReviews(data.reviews);
